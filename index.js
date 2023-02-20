@@ -17,6 +17,7 @@ app.use("/user", userRouter);
 app.use("/country", countryRouter);
 app.use("/review", reviewRouter);
 app.use("/comment", commentRouter);
+app.use("/upload", uploadImgRouter);
 
 app.listen(Number(process.env.PORT), () => {
   console.log(`Server up and running at port ${process.env.PORT}`);
