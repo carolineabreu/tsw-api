@@ -4,6 +4,7 @@ import express from "express";
 import { commentRouter } from "./routes/comment.routes.js";
 import { countryRouter } from "./routes/country.routes.js";
 import { reviewRouter } from "./routes/review.routes.js";
+import { uploadImgRouter } from "./routes/uploadImage.routes.js";
 import { userRouter } from "./routes/user.routes.js";
 
 dotenv.config();
