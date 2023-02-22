@@ -1,10 +1,9 @@
-import { PrismaClient } from '@prisma/client';
 import express from 'express';
+import { prisma } from '../config/prismaClient.js';
 import attachCurrentUser from "../middlewares/attachCurrentUser.js";
 import isAuth from '../middlewares/isAuth.js';
 
 const commentRouter = express.Router();
-const prisma = new PrismaClient();
 
 commentRouter.post(
   "/:reviewId/new",

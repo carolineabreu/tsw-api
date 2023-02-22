@@ -1,11 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import express from 'express';
+import { prisma } from '../config/prismaClient.js';
 import attachCurrentUser from "../middlewares/attachCurrentUser.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
 import isAuth from '../middlewares/isAuth.js';
 
 const countryRouter = express.Router();
-const prisma = new PrismaClient();
 
 countryRouter.post(
   "/new-country",

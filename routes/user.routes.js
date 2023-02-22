@@ -1,14 +1,13 @@
-import { PrismaClient } from '@prisma/client';
 import bcrypt from "bcrypt";
 import express from 'express';
 import { generateToken } from '../config/jwt.config.js';
+import { prisma } from '../config/prismaClient.js';
 import attachCurrentUser from "../middlewares/attachCurrentUser.js";
 import { isAdmin } from "../middlewares/isAdmin.js";
 import isAuth from '../middlewares/isAuth.js';
 
 
 const userRouter = express.Router();
-const prisma = new PrismaClient();
 
 userRouter.post("/signup", async (req, res) => {
   try {
