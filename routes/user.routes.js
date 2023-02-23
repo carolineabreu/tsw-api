@@ -166,6 +166,25 @@ userRouter.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
   }
 });
 
+userRouter.get("/savedCountries", isAuth, attachCurrentUser, async (req, res) => {
+  try {
+    const loggedInUser = req.currentUser;
+
+    const likedCountries = await prisma.country.findMany({
+      where: {
+        savedBy: {
+          id: loggedInUser.id
+        }
+      }
+    });
+
+    return res.status(200).json(likedCountries);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(error);
+  }
+});
+
 userRouter.patch(
   "/edit-profile",
   isAuth,
