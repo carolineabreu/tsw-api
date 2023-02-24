@@ -214,7 +214,7 @@ userRouter.patch(
           id: loggedInUser.id
         },
         data: {
-          name: data.name
+          username: data.username
         }
       });
 
