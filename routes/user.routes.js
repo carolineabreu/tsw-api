@@ -185,6 +185,21 @@ userRouter.get("/savedCountries", isAuth, attachCurrentUser, async (req, res) =>
   }
 });
 
+userRouter.get("/byUsername", async (req, res) => {
+  try {
+    const allUsernames = await prisma.user.findMany({
+      select: {
+        username: true
+      }
+    });
+
+    return res.status(200).json(allUsernames);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(error);
+  }
+});
+
 userRouter.patch(
   "/edit-profile",
   isAuth,
