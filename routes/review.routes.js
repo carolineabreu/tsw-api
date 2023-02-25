@@ -69,7 +69,33 @@ reviewRouter.get("/pagination", async (req, res) => {
     for (let i = 0; i < pages; i++) {
       const page = prisma.review.findMany({
         skip: i * 6,
-        take: 6
+        take: 6,
+        include: {
+          country: {
+            select: {
+              id: true,
+              name: true
+            }
+          },
+          comments: {
+            select: {
+              id: true,
+              body: true,
+              author: {
+                select: {
+                  id: true,
+                  username: true
+                }
+              }
+            }
+          },
+          author: {
+            select: {
+              id: true,
+              username: true
+            }
+          },
+        }
       });
       allDocsPromises.push(page);
     }
