@@ -40,7 +40,7 @@ reviewRouter.get("/all", async (req, res) => {
             author: {
               select: {
                 id: true,
-                name: true
+                username: true
               }
             }
           }
@@ -48,7 +48,7 @@ reviewRouter.get("/all", async (req, res) => {
         author: {
           select: {
             id: true,
-            name: true
+            username: true
           }
         },
       }
@@ -131,7 +131,7 @@ reviewRouter.get("/:reviewId", async (req, res) => {
       include: {
         author: {
           select: {
-            name: true
+            username: true
           }
         },
         country: {
