@@ -61,6 +61,26 @@ reviewRouter.get("/all", async (req, res) => {
   }
 });
 
+reviewRouter.get("/pagination", async (req, res) => {
+  try {
+    const count = await prisma.review.count();
+    const pages = Math.ceil(count / 6);
+    const allDocsPromises = [];
+    for (let i = 0; i < pages; i++) {
+      const page = prisma.review.findMany({
+        skip: i * 6,
+        take: 6
+      });
+      allDocsPromises.push(page);
+    }
+    const allDocs = await Promise.all(allDocsPromises);
+    return res.status(200).json(allDocs);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(error);
+  }
+});
+
 reviewRouter.get(
   "/all-reviews",
   isAuth,
