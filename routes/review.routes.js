@@ -70,6 +70,9 @@ reviewRouter.get("/pagination", async (req, res) => {
       const page = prisma.review.findMany({
         skip: i * 6,
         take: 6,
+        orderBy: {
+          createdAt: "desc"
+        },
         include: {
           country: {
             select: {
