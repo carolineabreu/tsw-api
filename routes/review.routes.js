@@ -186,7 +186,8 @@ reviewRouter.get("/:reviewId", async (req, res) => {
         country: {
           select: {
             id: true,
-            name: true
+            name: true,
+            images: true
           }
         },
         comments: true
