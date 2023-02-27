@@ -13,25 +13,20 @@ enum Role {
 }
 
 model User {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  username       String    @unique
-  email          String    @unique
+  username       String       @unique
+  email          String       @unique
   password       String
-  role           Role      @default(USER)
-  emailConfirm   Boolean   @default(false)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  role           Role         @default(USER)
+  emailConfirm   Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   countries      Country[]
-  writtenReviews Review[]  @relation("writtenReviews")
+  writtenReviews Review[]     @relation("writtenReviews")
   comments       Comment[]
-  //replies        Reply[]
-
-  savedCountries Country[] @relation("savedCountries")
-  likedReviews   Review[]  @relation("likedReviews")
-  //likedComments  Comment[] @relation("likedComments")
-  // likedReplies Reply[] @relation("likedReplies")
-  //fazer uma parte de chat, caso um user queira falar com outro
+  savedCountries Country[]    @relation("savedCountries")
+  likes          UserReview[]
 
   @@map("users")
 }
@@ -63,21 +58,20 @@ model Country {
 }
 
 model Review {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   image     String?
   rate      String
   body      String
   date      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  country   Country   @relation(fields: [countryId], references: [id])
-  countryId String    @db.ObjectId
-  author    User      @relation(name: "writtenReviews", fields: [authorId], references: [id])
-  authorId  String    @db.ObjectId
-  likedBy   User?     @relation(name: "likedReviews", fields: [likedById], references: [id])
-  likedById String?   @db.ObjectId
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  country   Country      @relation(fields: [countryId], references: [id])
+  countryId String       @db.ObjectId
+  author    User         @relation(name: "writtenReviews", fields: [authorId], references: [id])
+  authorId  String       @db.ObjectId
   comments  Comment[]
+  likedBy   UserReview[]
 
   @@map("reviews")
 }
@@ -90,21 +84,14 @@ model Comment {
   authorId  String   @db.ObjectId
   review    Review   @relation(fields: [reviewId], references: [id])
   reviewId  String   @db.ObjectId
-  // likedBy   User     @relation(name: "likedComments", fields: [likedById], references: [id])
-  // likedById String   @db.ObjectId
-  //replies   Reply[]
 
   @@map("comments")
 }
 
-// model Reply {
-//   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-//   body      String
-//   createdAt DateTime @default(now())
-//   authorId  String   @db.ObjectId
-//   author    User     @relation(fields: [authorId], references: [id])
-//   commentId String   @db.ObjectId
-//   comment   Comment  @relation(fields: [commentId], references: [id])
-
-//   @@map("replies")
-// }
+model UserReview {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  user     User?   @relation(fields: [userId], references: [id])
+  review   Review? @relation(fields: [reviewId], references: [id])
+  userId   String? @db.ObjectId
+  reviewId String  @db.ObjectId
+}
