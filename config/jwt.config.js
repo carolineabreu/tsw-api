@@ -6,7 +6,7 @@ export function generateToken(user) {
   const signature = process.env.TOKEN_SIGN_SECRET;
   const expiration = "12h";
 
-  return jwt.sign({ id, name, email, role }, signature, {
+  return jwt.sign({ id, name, email, role, likes }, signature, {
     expiresIn: expiration,
   });
 }
