@@ -107,7 +107,7 @@ userRouter.get("/all", isAuth, attachCurrentUser, isAdmin, async (req, res) => {
             body: true
           }
         },
-        likedReviews: {
+        likes: {
           select: {
             id: true,
             title: true
@@ -153,8 +153,13 @@ userRouter.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
           }
         },
         comments: true,
-        likedReviews: true,
-        savedCountries: true
+        likes: {
+          select: {
+            review: true,
+            reviewId: true
+          }
+        },
+        savedCountries: true,
       }
     });
 
