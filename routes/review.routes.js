@@ -190,7 +190,13 @@ reviewRouter.get("/:reviewId", async (req, res) => {
             images: true
           }
         },
-        comments: true
+        comments: true,
+        likedBy: {
+          select: {
+            user: true,
+            userId: true
+          }
+        }
       }
     });
 
@@ -238,6 +244,40 @@ reviewRouter.patch("/edit/:id", isAuth, attachCurrentUser, async (req, res) => {
     });
 
     return res.status(200).json(updateReview);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+reviewRouter.patch("/:id/like", isAuth, attachCurrentUser, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const loggedInUser = req.currentUser;
+
+    const likes = await prisma.userReview.findMany();
+    let findLike = likes.filter((id) => id.userId === loggedInUser.id);
+    console.log(findLike);
+    if (findLike.length) {
+      let dislike = await prisma.userReview.delete({
+        where: {
+          id: findLike[0].id
+        }
+      });
+
+      return res.status(200).json(dislike);
+    } else {
+      const favorite = await prisma.userReview.create({
+        data: {
+          reviewId: id,
+          userId: loggedInUser.id
+        }
+      });
+      return res.status(200).json(favorite);
+    }
+
+
+
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
