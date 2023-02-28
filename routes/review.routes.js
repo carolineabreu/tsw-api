@@ -261,20 +261,48 @@ reviewRouter.delete(
   attachCurrentUser,
   async (req, res) => {
     try {
-      const deleteComment = await prisma.comment.deleteMany({
-        where: {
-          reviewId: req.params.id
-        }
-      });
+      // const hasComments = await prisma.review.findUnique({
+      //   where: {
+      //     id: req.params.id
+      //   },
+      //   include: {
+      //     comments: true
+      //   }
+      // });
 
-      const deleteReview = await prisma.review.delete({
+      // if (hasComments.comments) {
+      //   const deleteComment = await prisma.comment.deleteMany({
+      //     where: {
+      //       reviewId: req.params.id
+      //     }
+      //   });
+
+      //   const deleteReview = await prisma.review.delete({
+      //     where: {
+      //       id: req.params.id
+      //     }
+      //   });
+
+      //   const transaction = await prisma.$transaction([deleteComment, deleteReview]);
+      //   return res.status(200).json(transaction);
+      // } else {
+      //   const deleted = await prisma.review.delete({
+      //     where: {
+      //       id: req.params.id
+      //     }
+      //   });
+
+      //   return res.status(200).json(deleted);
+      // }
+
+      const deleted = await prisma.review.delete({
         where: {
           id: req.params.id
         }
       });
 
-      const transaction = await prisma.$transaction([deleteComment, deleteReview]);
-      return res.status(200).json(transaction);
+      return res.status(200).json(deleted);
+
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);
