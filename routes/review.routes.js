@@ -140,36 +140,6 @@ reviewRouter.get(
     }
   });
 
-reviewRouter.get(
-  "/all-likes",
-  isAuth,
-  attachCurrentUser,
-  async (req, res) => {
-    try {
-      const loggedInUser = req.currentUser;
-
-      const userReviews = await prisma.review.findMany({
-        where: {
-          likedBy: {
-            id: loggedInUser.id
-          }
-        },
-        include: {
-          author: {
-            select: {
-              username: true
-            }
-          }
-        }
-      });
-
-      return res.status(200).json(userReviews);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json(error);
-    }
-  });
-
 reviewRouter.get("/:reviewId", async (req, res) => {
   try {
     const { reviewId } = req.params;
