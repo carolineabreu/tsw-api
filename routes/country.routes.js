@@ -161,12 +161,12 @@ countryRouter.patch(
       const loggedInUser = req.currentUser;
 
       const saved = await prisma.userSaveCountry.findMany();
-      let findSave = saved.filter((id) => (id.userId === loggedInUser.id && (id.countryId === id)));
-
-      if (findSave.length) {
+      let findUser = saved.filter((id) => (id.userId === loggedInUser.id));
+      let find = findUser.filter((user) => user.countryId === id);
+      if (find.length) {
         let unsaved = await prisma.userSaveCountry.delete({
           where: {
-            id: findSave[0].id
+            id: find[0].id
           }
         });
         return res.status(200).json(unsaved);

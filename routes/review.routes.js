@@ -230,12 +230,14 @@ reviewRouter.patch("/:id/like", isAuth, attachCurrentUser, async (req, res) => {
     const loggedInUser = req.currentUser;
 
     const likes = await prisma.userReview.findMany();
-    let findLike = likes.filter((id) => (id.userId === loggedInUser.id && id.reviewId === id));
-    console.log(findLike);
-    if (findLike.length) {
+    let findUser = likes.filter((id) => (id.userId === loggedInUser.id));
+
+    let find = findUser.filter((user) => user.reviewId === id);
+    console.log(find);
+    if (find.length) {
       let dislike = await prisma.userReview.delete({
         where: {
-          id: findLike[0].id
+          id: find[0].id
         }
       });
 
