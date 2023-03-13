@@ -230,7 +230,7 @@ reviewRouter.patch("/:id/like", isAuth, attachCurrentUser, async (req, res) => {
     const loggedInUser = req.currentUser;
 
     const likes = await prisma.userReview.findMany();
-    let findLike = likes.filter((id) => id.userId === loggedInUser.id);
+    let findLike = likes.filter((id) => (id.userId === loggedInUser.id && id.reviewId === id));
     console.log(findLike);
     if (findLike.length) {
       let dislike = await prisma.userReview.delete({
@@ -265,45 +265,18 @@ reviewRouter.delete(
   attachCurrentUser,
   async (req, res) => {
     try {
-      // const hasComments = await prisma.review.findUnique({
-      //   where: {
-      //     id: req.params.id
-      //   },
-      //   include: {
-      //     comments: true
-      //   }
-      // });
-
-      // if (hasComments.comments) {
-      //   const deleteComment = await prisma.comment.deleteMany({
-      //     where: {
-      //       reviewId: req.params.id
-      //     }
-      //   });
-
-      //   const deleteReview = await prisma.review.delete({
-      //     where: {
-      //       id: req.params.id
-      //     }
-      //   });
-
-      //   const transaction = await prisma.$transaction([deleteComment, deleteReview]);
-      //   return res.status(200).json(transaction);
-      // } else {
-      //   const deleted = await prisma.review.delete({
-      //     where: {
-      //       id: req.params.id
-      //     }
-      //   });
-
-      //   return res.status(200).json(deleted);
-      // }
-
       const deleted = await prisma.review.delete({
         where: {
           id: req.params.id
         }
       });
+
+      await prisma.userReview.deleteMany({
+        where: {
+          reviewId: req.params.id
+        }
+      });
+
 
       return res.status(200).json(deleted);
 
