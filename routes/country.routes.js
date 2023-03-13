@@ -85,6 +85,22 @@ countryRouter.get("/:id", async (req, res) => {
             rate: true,
             createdAt: true
           }
+        },
+        savedBy: {
+          select: {
+            user: {
+              select: {
+                id: true,
+                username: true
+              }
+            },
+            country: {
+              select: {
+                id: true,
+                name: true
+              }
+            }
+          }
         }
       }
     });
@@ -129,6 +145,41 @@ countryRouter.patch(
       });
 
       return res.status(200).json(updatedCountry);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json(err);
+    }
+  });
+
+countryRouter.patch(
+  "/:id/save",
+  isAuth,
+  attachCurrentUser,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const loggedInUser = req.currentUser;
+
+      const saved = await prisma.userSaveCountry.findMany();
+      let findSave = saved.filter((id) => id.userId === loggedInUser.id);
+
+      if (findSave.length) {
+        let unsaved = await prisma.userSaveCountry.delete({
+          where: {
+            id: findSave[0].id
+          }
+        });
+        return res.status(200).json(unsaved);
+      } else {
+        const save = await prisma.userSaveCountry.create({
+          data: {
+            countryId: id,
+            userId: loggedInUser.id
+          }
+        });
+
+        return res.status(200).json(save);
+      }
     } catch (err) {
       console.log(err);
       return res.status(500).json(err);

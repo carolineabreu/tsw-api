@@ -163,7 +163,11 @@ reviewRouter.get("/:reviewId", async (req, res) => {
         comments: true,
         likedBy: {
           select: {
-            user: true,
+            user: {
+              select: {
+                username: true
+              }
+            },
             userId: true
           }
         }

@@ -159,7 +159,16 @@ userRouter.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
             reviewId: true
           }
         },
-        savedCountries: true,
+        savedCountries: {
+          select: {
+            country: {
+              select: {
+                name: true,
+                id: true
+              }
+            }
+          }
+        },
       }
     });
 
