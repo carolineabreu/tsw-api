@@ -164,7 +164,8 @@ userRouter.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
             country: {
               select: {
                 name: true,
-                id: true
+                id: true,
+                images: true
               }
             }
           }
